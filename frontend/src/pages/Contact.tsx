@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Send, CheckCircle2, AlertCircle } from 'lucide-react';
 import { API_URL } from '../config/env';
+import { motion } from 'framer-motion';
 
 const Contact = () => {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
@@ -29,7 +30,6 @@ const Contact = () => {
       setStatus('success');
       setFormData({ name: '', email: '', message: '' });
       
-      // Reset success message after 5 seconds
       setTimeout(() => setStatus('idle'), 5000);
     } catch (err) {
       setStatus('error');
@@ -38,39 +38,49 @@ const Contact = () => {
   };
 
   return (
-    <div className="py-8 max-w-2xl mx-auto w-full animate-in fade-in duration-700">
-      <div className="mb-10 text-center">
-        <h1 className="text-4xl font-bold mb-4">Get in Touch</h1>
-        <p className="text-text-muted text-lg">
-          Have a question or want to work together? Leave a message and I'll get back to you.
+    <div className="max-w-2xl mx-auto w-full px-6 sm:px-8 py-20 animate-in fade-in duration-700 relative z-10">
+      <div className="mb-10 text-left">
+        <h1 className="text-4xl font-black mb-4 text-white">Get in Touch</h1>
+        <p className="text-text-muted text-base font-medium leading-relaxed">
+          Leave a message below for custom inquiries, project collaboration, or opportunity invites.
         </p>
       </div>
 
-      <div className="bg-surface p-8 rounded-2xl border border-white/5 shadow-xl">
+      <div className="glass-panel p-8 md:p-10 rounded-2xl border-white/5 shadow-2xl relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-tr from-primary/5 to-transparent pointer-events-none" />
+        
         {status === 'success' ? (
-          <div className="flex flex-col items-center justify-center py-12 text-center">
-            <CheckCircle2 className="w-16 h-16 text-green-500 mb-4" />
-            <h3 className="text-2xl font-bold mb-2">Message Sent!</h3>
-            <p className="text-text-muted">Thanks for reaching out. I'll respond as soon as possible.</p>
+          <motion.div 
+            className="flex flex-col items-center justify-center py-12 text-center"
+            initial={{ scale: 0.95, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+          >
+            <div className="p-4 rounded-full bg-green-500/10 text-green-400 border border-green-500/20 mb-4 animate-bounce">
+              <CheckCircle2 className="w-10 h-10" />
+            </div>
+            <h3 className="text-2xl font-black text-white mb-2">Message Sent!</h3>
+            <p className="text-text-muted text-sm font-semibold max-w-sm">
+              Thank you for reaching out. I'll get back to you as soon as possible.
+            </p>
             <button 
               onClick={() => setStatus('idle')}
-              className="mt-8 text-primary hover:underline font-medium"
+              className="mt-8 px-6 py-2.5 rounded-lg bg-white/5 border border-white/10 text-xs font-bold uppercase tracking-wider text-white hover:bg-white/10 transition-all cursor-pointer"
             >
-              Send another message
+              Send Another Message
             </button>
-          </div>
+          </motion.div>
         ) : (
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-6 relative z-10">
             {status === 'error' && (
               <div className="flex items-center gap-3 p-4 bg-red-500/10 text-red-400 rounded-lg border border-red-500/20">
                 <AlertCircle className="w-5 h-5 flex-shrink-0" />
-                <p className="text-sm">{errorMessage}</p>
+                <p className="text-xs font-semibold">{errorMessage}</p>
               </div>
             )}
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-2">
-                <label htmlFor="name" className="text-sm font-medium text-text-muted">Name</label>
+              <div className="space-y-2 text-left">
+                <label htmlFor="name" className="text-xs font-bold uppercase tracking-wider text-text-muted">Name</label>
                 <input
                   type="text"
                   id="name"
@@ -78,12 +88,12 @@ const Contact = () => {
                   required
                   value={formData.name}
                   onChange={handleChange}
-                  className="w-full bg-background border border-white/10 rounded-lg px-4 py-3 text-text focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
+                  className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3.5 text-sm text-text focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-all placeholder:text-white/20"
                   placeholder="John Doe"
                 />
               </div>
-              <div className="space-y-2">
-                <label htmlFor="email" className="text-sm font-medium text-text-muted">Email</label>
+              <div className="space-y-2 text-left">
+                <label htmlFor="email" className="text-xs font-bold uppercase tracking-wider text-text-muted">Email</label>
                 <input
                   type="email"
                   id="email"
@@ -91,14 +101,14 @@ const Contact = () => {
                   required
                   value={formData.email}
                   onChange={handleChange}
-                  className="w-full bg-background border border-white/10 rounded-lg px-4 py-3 text-text focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
+                  className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3.5 text-sm text-text focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-all placeholder:text-white/20"
                   placeholder="john@example.com"
                 />
               </div>
             </div>
             
-            <div className="space-y-2">
-              <label htmlFor="message" className="text-sm font-medium text-text-muted">Message</label>
+            <div className="space-y-2 text-left">
+              <label htmlFor="message" className="text-xs font-bold uppercase tracking-wider text-text-muted">Message</label>
               <textarea
                 id="message"
                 name="message"
@@ -106,18 +116,18 @@ const Contact = () => {
                 rows={5}
                 value={formData.message}
                 onChange={handleChange}
-                className="w-full bg-background border border-white/10 rounded-lg px-4 py-3 text-text focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all resize-none"
-                placeholder="What's on your mind?"
+                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3.5 text-sm text-text focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-all resize-none placeholder:text-white/20"
+                placeholder="Discussing opportunities, roles, or project work..."
               />
             </div>
             
             <button
               type="submit"
               disabled={status === 'submitting'}
-              className="w-full inline-flex items-center justify-center gap-2 bg-primary text-white font-medium px-6 py-3 rounded-lg hover:bg-primary/90 transition-all disabled:opacity-70 disabled:cursor-not-allowed"
+              className="w-full inline-flex items-center justify-center gap-2 bg-primary text-white font-bold text-xs uppercase tracking-wider py-4 rounded-xl hover:bg-primary/95 transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed cursor-pointer"
             >
               {status === 'submitting' ? (
-                <>Sending...</>
+                <>Transmitting Message...</>
               ) : (
                 <>Send Message <Send className="w-4 h-4" /></>
               )}
