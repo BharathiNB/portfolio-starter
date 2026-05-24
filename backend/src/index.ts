@@ -27,6 +27,11 @@ app.use('/api/contact', contactRoutes);
 app.use(errorHandler);
 
 // Start server
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-});
+if (!process.env.VERCEL) {
+  app.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
+  });
+}
+
+export default app;
+
